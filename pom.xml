@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.robbins</groupId>
+    <artifactId>raspberry-pi-api</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>raspberry-pi-api Webapp</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>1.8</jdk.version>
+
+        <!-- Dependency versions -->
+        <jersey.version>1.18.3</jersey.version>
+        <logback.classic.version>1.0.13</logback.classic.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <spring.version>4.1.4.RELEASE</spring.version>
+
+        <!-- Plugin versions -->
+        <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+        <maven.tomcat.plugin.version>2.2</maven.tomcat.plugin.version>
+    </properties>
+    <modules>
+        <module>raspberry-pi-dto</module>
+        <module>raspberry-pi-webapp</module>
+        <module>raspberry-pi-client</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <!-- Jersey -->
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-servlet</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-json</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+
+            <!-- logging -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.classic.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>${maven.tomcat.plugin.version}</version>
+                </plugin>
+            </plugins>
+
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <configuration>
+                    <webapps>
+                        <webapp>
+                            <groupId>org.robbins</groupId>
+                            <artifactId>raspberry-pi-webapp</artifactId>
+                            <version>${project.version}</version>
+                            <type>war</type>
+                            <asWebapp>true</asWebapp>
+                            <contextPath>/api</contextPath>
+                        </webapp>
+                    </webapps>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
