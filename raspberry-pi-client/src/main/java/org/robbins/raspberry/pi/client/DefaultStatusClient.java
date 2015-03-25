@@ -2,6 +2,7 @@ package org.robbins.raspberry.pi.client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class DefaultStatusClient implements StatusClient {
@@ -11,8 +12,10 @@ public class DefaultStatusClient implements StatusClient {
     @Value("${server.address}")
     private String serverAddress;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     @Override
     public String getStatus() {
-        return null;
+        return restTemplate.getForObject(serverAddress + "status", String.class);
     }
 }

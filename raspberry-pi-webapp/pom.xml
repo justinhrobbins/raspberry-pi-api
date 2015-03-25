@@ -41,6 +41,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>api</finalName>
+        <finalName>raspberry-pi-api</finalName>
     </build>
 </project>

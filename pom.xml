@@ -10,24 +10,71 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
 
+        <!-- Only unit tests are run by default. -->
+        <skip.integration.tests>true</skip.integration.tests>
+        <skip.unit.tests>false</skip.unit.tests>
+
         <!-- Dependency versions -->
         <jersey.version>1.18.3</jersey.version>
+        <junit.version>4.10</junit.version>
         <logback.classic.version>1.0.13</logback.classic.version>
         <slf4j.version>1.7.5</slf4j.version>
         <spring.version>4.1.4.RELEASE</spring.version>
 
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+        <maven.failsafe.plugin.version>2.14</maven.failsafe.plugin.version>
+        <maven.surefire.plugin.version>2.14</maven.surefire.plugin.version>
         <maven.tomcat.plugin.version>2.2</maven.tomcat.plugin.version>
     </properties>
     <modules>
         <module>raspberry-pi-dto</module>
         <module>raspberry-pi-webapp</module>
         <module>raspberry-pi-client</module>
+        <module>raspberry-pi-feature-test</module>
     </modules>
+    <profiles>
+        <!-- TEST PROFILES -->
+        <!-- run only unit tests -->
+        <profile>
+            <id>skip-tests</id>
+            <properties>
+                <skip.integration.tests>true</skip.integration.tests>
+                <skip.unit.tests>true</skip.unit.tests>
+            </properties>
+        </profile>
+        <profile>
+            <id>unit-tests</id>
+        </profile>
+        <!-- run only integration tests -->
+        <profile>
+            <id>integration-tests</id>
+            <properties>
+                <!-- Used to locate the profile specific configuration file. -->
+                <build.profile.id>integration-test</build.profile.id>
+                <!-- Only integration tests are run. -->
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.unit.tests>true</skip.unit.tests>
+            </properties>
+        </profile>
+        <!-- run both unit and integration tests -->
+        <profile>
+            <id>all-tests</id>
+            <properties>
+                <!-- All tests are run. -->
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.unit.tests>false</skip.unit.tests>
+            </properties>
+        </profile>
+    </profiles>
     <dependencyManagement>
         <dependencies>
             <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -36,6 +83,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
                 <version>${spring.version}</version>
             </dependency>
 
@@ -63,6 +115,20 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
+            <!-- testing -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -81,10 +147,62 @@
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>${maven.tomcat.plugin.version}</version>
+                    <configuration>
+                        <webapps>
+                            <webapp>
+                                <groupId>org.robbins</groupId>
+                                <artifactId>raspberry-pi-webapp</artifactId>
+                                <version>${project.version}</version>
+                                <type>war</type>
+                                <asWebapp>true</asWebapp>
+                                <contextPath>/api</contextPath>
+                            </webapp>
+                        </webapps>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <!-- Skips unit tests if the value of skip.unit.tests
+                            property is true -->
+                        <skipTests>${skip.unit.tests}</skipTests>
+                        <includes>
+                            <include>**/*UT.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*IT.java</exclude>
+                        </excludes>
+                        <!-- <parallel>classes</parallel> -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven.failsafe.plugin.version}</version>
+                    <configuration>
+                        <!-- Skips integration tests if the value of skip.integration.tests
+                            property is true -->
+                        <skipTests>${skip.integration.tests}</skipTests>
+                        <includes>
+                            <include>**/*IT.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*UT.java</exclude>
+                        </excludes>
+                        <!-- <parallel>classes</parallel> -->
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
-
         </pluginManagement>
         <plugins>
             <plugin>
@@ -92,20 +210,12 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <configuration>
-                    <webapps>
-                        <webapp>
-                            <groupId>org.robbins</groupId>
-                            <artifactId>raspberry-pi-webapp</artifactId>
-                            <version>${project.version}</version>
-                            <type>war</type>
-                            <asWebapp>true</asWebapp>
-                            <contextPath>/api</contextPath>
-                        </webapp>
-                    </webapps>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
