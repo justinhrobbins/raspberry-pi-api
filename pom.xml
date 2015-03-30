@@ -5,7 +5,7 @@
     <artifactId>raspberry-pi-api</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>raspberry-pi-api Webapp</name>
+    <name>raspberry-pi-api</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.8</jdk.version>
@@ -202,24 +202,6 @@
                         <target>${jdk.version}</target>
                     </configuration>
                 </plugin>
-<!--
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <configuration>
-                        <webapps>
-                            <webapp>
-                                <groupId>org.robbins</groupId>
-                                <artifactId>raspberry-pi-webapp</artifactId>
-                                <version>${project.version}</version>
-                                <type>war</type>
-                                <asWebapp>true</asWebapp>
-                                <contextPath>/api</contextPath>
-                            </webapp>
-                        </webapps>
-                     </configuration>
-                </plugin>
--->
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
