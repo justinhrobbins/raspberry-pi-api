@@ -17,7 +17,7 @@
         <!-- Dependency versions -->
         <jersey.version>1.18.3</jersey.version>
         <junit.version>4.10</junit.version>
-        <logback.classic.version>1.0.13</logback.classic.version>
+        <logback.version>1.0.13</logback.version>
         <slf4j.version>1.7.5</slf4j.version>
         <spring.version>4.1.4.RELEASE</spring.version>
 
@@ -29,9 +29,11 @@
     </properties>
     <modules>
         <module>raspberry-pi-dto</module>
+        <module>raspberry-pi-service</module>
         <module>raspberry-pi-webapp</module>
         <module>raspberry-pi-client</module>
         <module>raspberry-pi-feature-test</module>
+        <module>raspberry-pi-config</module>
     </modules>
     <profiles>
         <!-- TEST PROFILES -->
@@ -79,6 +81,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -103,16 +111,66 @@
                 <version>${jersey.version}</version>
             </dependency>
 
+            <!-- Jersey + Spring integration dependency -->
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-spring</artifactId>
+                <version>${jersey.version}</version>
+                <scope>runtime</scope>
+                <!-- don't let this artifact pull in old versions of the
+                    following dependencies -->
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-aop</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-asm</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-beans</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-context</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-core</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-expression</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-web</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <!-- logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>${logback.classic.version}</version>
+                <version>${logback.version}</version>
                 <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
 
@@ -144,6 +202,7 @@
                         <target>${jdk.version}</target>
                     </configuration>
                 </plugin>
+<!--
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
@@ -158,7 +217,23 @@
                                 <contextPath>/api</contextPath>
                             </webapp>
                         </webapps>
+                     </configuration>
+                </plugin>
+-->
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>${maven.tomcat.plugin.version}</version>
+                    <configuration>
+                        <path>/api</path>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.robbins</groupId>
+                            <artifactId>raspberry-pi-config</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

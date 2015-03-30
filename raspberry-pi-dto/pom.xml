@@ -9,7 +9,7 @@
     <artifactId>raspberry-pi-dto</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>raspberry-pi-api dto</name>
+    <name>raspberry-pi-dto</name>
     <properties>
         <jersey.version>1.18.3</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

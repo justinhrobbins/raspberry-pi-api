@@ -1,0 +1,16 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger{20} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.robbins" level="debug" />
+    <logger name="org.springframework" level="debug" />
+    <logger name="org.springsource" level="debug" />
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

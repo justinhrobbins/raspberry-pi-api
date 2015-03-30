@@ -5,29 +5,18 @@
         <artifactId>raspberry-pi-api</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>raspberry-pi-client</artifactId>
+    <artifactId>raspberry-pi-config</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>raspberry-pi-client</name>
+    <name>raspberry-pi-config</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-    </dependencies>
+
     <build>
-        <finalName>raspberry-pi-client</finalName>
+        <finalName>raspberry-pi-raspberry-pi-config</finalName>
     </build>
 </project>
