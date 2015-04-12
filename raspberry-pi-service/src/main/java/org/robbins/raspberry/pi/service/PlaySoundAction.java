@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import java.io.File;
 
 @Service
 public class PlaySoundAction implements PiActionService {
@@ -25,13 +26,15 @@ public class PlaySoundAction implements PiActionService {
         LOGGER.debug("Invoking action: {}", action);
 
         try {
-            InputStream in = new FileInputStream(BASE_SOUND_DIRECTORY + action.getValue());
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File(BASE_SOUND_DIRECTORY + action.getValue()));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(gainControl.getMaximum());
+            clip.start();
 
-            // create an audiostream from the inputstream
-            AudioStream audioStream = new AudioStream(in);
-
-            // play the audio clip with the audioplayer class
-            AudioPlayer.player.start(audioStream);
         } catch (Exception e) {
             throw new RaspberryPiAppException(e.getMessage(), e);
         }
