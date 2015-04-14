@@ -13,30 +13,40 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.io.File;
 
-@Service
-public class PlaySoundAction implements PiActionService {
+@Service("playSoundAction")
+public class PlaySoundActionImpl implements PiActionService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlaySoundAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlaySoundActionImpl.class);
 
     @Value("${base.sound.files.directory}")
-    private String BASE_SOUND_DIRECTORY;
+    private String baseSoundDirectory;
 
     @Override
     public void invokeAction(PiAction action) throws RaspberryPiAppException {
         LOGGER.debug("Invoking action: {}", action);
 
+        final String soundFile = baseSoundDirectory + action.getValue();
+        LOGGER.debug("Playing sound file: '{}'", soundFile);
+
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
-                    new File(BASE_SOUND_DIRECTORY + action.getValue()));
-            Clip clip = AudioSystem.getClip();
+            final AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File(soundFile));
+            final Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            FloatControl gainControl =
+
+            // play at maximum volume
+            final FloatControl gainControl =
                     (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(gainControl.getMaximum());
+
             clip.start();
 
         } catch (Exception e) {
             throw new RaspberryPiAppException(e.getMessage(), e);
         }
+    }
+
+    public void setBaseSoundDirectory(String baseSoundDirectory) {
+        this.baseSoundDirectory = baseSoundDirectory;
     }
 }
