@@ -1,7 +1,6 @@
 package org.robbins.raspberry.pi.service;
-import static org.quartz.CronScheduleBuilder.*;
+
 import org.quartz.*;
-import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
 import org.robbins.raspberry.pi.scheduling.PlaySoundJob;
@@ -10,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import static org.quartz.TriggerBuilder.*;
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
+
+
 @Service
 public class PiScheduleServiceImpl implements PiScheduleService {
 
@@ -37,7 +36,6 @@ public class PiScheduleServiceImpl implements PiScheduleService {
         final CronTrigger trigger = newTrigger()
                 .withIdentity(piSchedule.getScheduleName() + "Trigger")
                 .withSchedule(cronSchedule(piSchedule.cronTrigger))
-//                .forJob(piSchedule.actionName)
                 .build();
 
          return trigger;
