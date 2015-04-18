@@ -22,7 +22,10 @@ public class PiAction
 	public String name;
 	public String value;
 
-    public PiAction(String name, String value) {
+	public PiAction()
+	{}
+
+	public PiAction(String name, String value) {
         this.name = name;
         this.value = value;
     }
