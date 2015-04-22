@@ -28,7 +28,7 @@ public class ActionResource
 
     @POST
     @Path("/pi-action")
-    public Response action(final PiAction action) throws RaspberryPiAppException {
+    public Response postAction(final PiAction action) throws RaspberryPiAppException {
         LOGGER.debug("Received request: {}", action);
 
         actionService.invokeAction(action);
