@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class DefaultStatusClient implements StatusClient {
 
-    private static final String statusUrl = "/status";
+    private static final String statusUrl = "status";
 
     @Value("${server.address}")
     private String serverAddress;
