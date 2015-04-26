@@ -28,7 +28,7 @@
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="driverClass" value="org.h2.Driver" />
-        <property name="jdbcUrl" value="jdbc:h2:file:raspberryPiDb" />
+        <property name="jdbcUrl" value="jdbc:h2:file:database/raspberryPiDb" />
     </bean>
 
     <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
