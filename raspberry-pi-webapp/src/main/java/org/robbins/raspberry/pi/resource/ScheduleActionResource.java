@@ -30,7 +30,7 @@ public class ScheduleActionResource
 
     @POST
     public Response action(final PiSchedule piSchedule) throws RaspberryPiAppException {
-        LOGGER.debug("Received request: {}", piSchedule);
+        LOGGER.debug("Received request to display files");
 
         scheduleService.scheduleAction(piSchedule);
 
