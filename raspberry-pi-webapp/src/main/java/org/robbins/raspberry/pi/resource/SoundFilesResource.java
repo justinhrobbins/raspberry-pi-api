@@ -27,7 +27,7 @@ public class SoundFilesResource {
 
     @GET
     public SoundFiles getFilesList() throws RaspberryPiAppException {
-        LOGGER.debug("Received request: status: OK");
+        LOGGER.debug("Received request to GET sound files");
 
         return soundService.getSoundFiles();
     }

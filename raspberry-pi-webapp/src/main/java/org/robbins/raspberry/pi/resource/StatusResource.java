@@ -18,7 +18,7 @@ public class StatusResource {
 
     @GET
     public String getStatus() {
-        LOGGER.debug("Received request: status: OK");
+        LOGGER.debug("Received request for status");
 
         return "Status: Ok";
     }
