@@ -1,4 +1,4 @@
-package org.robbins.raspberry.pi.service;
+package org.robbins.raspberry.pi.scheduling;
 
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;

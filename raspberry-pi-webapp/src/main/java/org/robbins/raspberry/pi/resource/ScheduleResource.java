@@ -3,7 +3,7 @@ package org.robbins.raspberry.pi.resource;
 
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
-import org.robbins.raspberry.pi.service.PiScheduleService;
+import org.robbins.raspberry.pi.scheduling.PiScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

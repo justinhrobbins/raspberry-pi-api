@@ -1,9 +1,10 @@
-package org.robbins.raspberry.pi.service;
+package org.robbins.raspberry.pi.scheduling;
 
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
+import org.robbins.raspberry.pi.scheduling.PiScheduleService;
 import org.robbins.raspberry.pi.scheduling.PlaySoundJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

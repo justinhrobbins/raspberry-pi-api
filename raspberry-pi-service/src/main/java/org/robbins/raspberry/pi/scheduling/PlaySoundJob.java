@@ -7,10 +7,12 @@ import org.robbins.raspberry.pi.model.PiAction;
 import org.robbins.raspberry.pi.model.PiSchedule;
 import org.robbins.raspberry.pi.service.PiActionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public class PlaySoundJob extends QuartzJobBean {
 
+    @Qualifier("playSound")
     @Autowired
     private PiActionService playSoundService;
 

@@ -2,37 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:jdbc="http://www.springframework.org/schema/jdbc"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder location="classpath*:application.properties" />
 
     <context:component-scan base-package="org.robbins.raspberry.pi.service" />
 
-    <bean name="playSoundJob" class="org.robbins.raspberry.pi.scheduling.PlaySoundJob" />
-
-    <bean name="autowiringSpringBeanJobFactory" class="org.robbins.raspberry.pi.scheduling.AutowiringSpringBeanJobFactory" />
-
-    <bean name="playSoundJobFactory" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.robbins.raspberry.pi.scheduling.PlaySoundJob"/>
-    </bean>
-
-    <bean name="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="jobFactory" ref="autowiringSpringBeanJobFactory" />
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-          destroy-method="close">
-        <property name="driverClass" value="org.h2.Driver" />
-        <property name="jdbcUrl" value="jdbc:h2:file:database/raspberryPiDb" />
-    </bean>
-
-    <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
-        <jdbc:script execution="INIT" location="classpath:sql/tables_h2.sql" />
-    </jdbc:initialize-database>
-
+    <import resource="classpath:applicationContext-scheduler.xml" />
+    <import resource="classpath:applicationContext-jdbc.xml" />
+    
 </beans>

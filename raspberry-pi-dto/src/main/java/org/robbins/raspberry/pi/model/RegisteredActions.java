@@ -16,20 +16,22 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@XmlRootElement(name = "soundFiles")
+@XmlRootElement(name = "registeredActions")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SoundFiles
+public class RegisteredActions
 {
-    @XmlElement(name="soundFile")
-    private List<String> soundFiles = new ArrayList<>();
+    @XmlElement(name="action")
+    private Set<String> actions = new HashSet<>();
 
-    public List<String> getSoundFiles() {
-        return soundFiles;
+    public Set<String> getActions() {
+        return actions;
     }
 
-    public void setSoundFiles(List<String> soundFiles) {
-        this.soundFiles = soundFiles;
+    public void setActions(Set<String> actions) {
+        this.actions = actions;
     }
 }

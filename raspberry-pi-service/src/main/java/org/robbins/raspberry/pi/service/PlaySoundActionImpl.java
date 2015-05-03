@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-@Service("playSoundAction")
+@Service("playSound")
 public class PlaySoundActionImpl implements PiActionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlaySoundActionImpl.class);
@@ -36,8 +36,6 @@ public class PlaySoundActionImpl implements PiActionService {
 
     @Override
     public void invokeAction(final PiAction action) throws RaspberryPiAppException {
-        LOGGER.debug("Invoking action: {}", action);
-
         final String soundFile = baseSoundDirectory + action.getValue();
         LOGGER.debug("Playing sound file: '{}'", soundFile);
 
