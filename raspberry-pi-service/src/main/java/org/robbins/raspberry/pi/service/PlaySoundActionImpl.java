@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service("playSound")
 public class PlaySoundActionImpl implements PiActionService {
@@ -62,15 +64,13 @@ public class PlaySoundActionImpl implements PiActionService {
 
         try {
             final Path directoryPath = Paths.get(new URI("file://" + baseSoundDirectory));
-
             if (Files.isDirectory(directoryPath)) {
-                final DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath);
-                for (Path path : stream) {
-                    final String fileName = path.getFileName().toString();
-                    if (validFileExtensions.contains(FilenameUtils.getExtension(fileName))) {
-                        soundFiles.getSoundFiles().add(fileName);
-                    }
-                }
+                final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directoryPath);
+                Stream<Path> stream = StreamSupport.stream(directoryStream.spliterator(), false);
+                stream.filter(path ->
+                        validFileExtensions.contains(FilenameUtils.getExtension(path.getFileName().toString())))
+                .forEach(path ->
+                        soundFiles.getSoundFiles().add(path.getFileName().toString()));
             }
         }
         catch (URISyntaxException|IOException e) {

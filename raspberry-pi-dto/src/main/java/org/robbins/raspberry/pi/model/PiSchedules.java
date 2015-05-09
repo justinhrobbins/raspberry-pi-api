@@ -18,18 +18,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashSet;
 import java.util.Set;
 
-@XmlRootElement(name = "registeredActions")
+@XmlRootElement(name = "piSchedules")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RegisteredActions
+public class PiSchedules
 {
-    @XmlElement(name="action")
-    private Set<String> actions = new HashSet<>();
+    @XmlElement(name="piSchedule")
+    private Set<PiSchedule> piSchedules = new HashSet<>();
 
-    public Set<String> getActions() {
-        return actions;
+    public Set<PiSchedule> getPiSchedules() {
+        return piSchedules;
     }
 
-    public void setActions(Set<String> actions) {
-        this.actions = actions;
+    public void setPiSchedules(Set<PiSchedule> piSchedules) {
+        this.piSchedules = piSchedules;
     }
 }

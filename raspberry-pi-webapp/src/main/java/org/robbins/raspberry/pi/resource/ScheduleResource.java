@@ -3,6 +3,7 @@ package org.robbins.raspberry.pi.resource;
 
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
+import org.robbins.raspberry.pi.model.PiSchedules;
 import org.robbins.raspberry.pi.scheduling.PiScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +35,11 @@ public class ScheduleResource
     }
 
     @GET
-    public Set<PiSchedule> getSchedules() throws RaspberryPiAppException {
+    public Response getSchedules() throws RaspberryPiAppException {
         LOGGER.debug("Received request to GET schedules");
 
-        return scheduleService.getSchedules();
+        PiSchedules schedules = scheduleService.getSchedules();
+        return Response.ok(schedules).build();
     }
 
     @DELETE

@@ -4,6 +4,7 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
+import org.robbins.raspberry.pi.model.PiSchedules;
 import org.robbins.raspberry.pi.scheduling.PiScheduleService;
 import org.robbins.raspberry.pi.scheduling.PlaySoundJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class PiScheduleServiceImpl implements PiScheduleService {
     }
 
     @Override
-    public Set<PiSchedule> getSchedules() throws RaspberryPiAppException {
+    public PiSchedules getSchedules() throws RaspberryPiAppException {
         try {
             Set<JobKey> jobKeys = scheduler.getJobKeys(GroupMatcher.anyJobGroup());
             return convertJobKeysToPiSchedules(jobKeys);
@@ -67,21 +68,24 @@ public class PiScheduleServiceImpl implements PiScheduleService {
         }
     }
 
-    // TODO: replace conversion with Dozer
-    private Set<PiSchedule> convertJobKeysToPiSchedules(final Set<JobKey> jobKeys) {
-        Set<PiSchedule> piSchedules = new HashSet<>();
-        for (JobKey job : jobKeys) {
-            PiSchedule schedule = new PiSchedule();
-            schedule.setScheduleName(job.getName());
-            piSchedules.add(schedule);
-        }
+    private PiSchedules convertJobKeysToPiSchedules(final Set<JobKey> jobKeys) {
+        PiSchedules piSchedules = new PiSchedules();
+        jobKeys.stream()
+                .forEach(jobKey ->
+                        piSchedules.getPiSchedules().add(convertJobKeyToPiSchedule(jobKey)));
         return piSchedules;
+    }
+
+    private PiSchedule convertJobKeyToPiSchedule(JobKey job) {
+        PiSchedule schedule = new PiSchedule();
+        schedule.setScheduleName(job.getName());
+        return schedule;
     }
 
     @Override
     public void deleteSchedule(final String scheduleName) throws RaspberryPiAppException {
         try {
-            scheduler.deleteJob(new JobKey(scheduleName, scheduler.DEFAULT_GROUP));
+            scheduler.deleteJob(new JobKey(scheduleName, Scheduler.DEFAULT_GROUP));
         } catch (SchedulerException e) {
             throw new RaspberryPiAppException(e.getMessage());
         }
