@@ -54,6 +54,12 @@
             <artifactId>quartz</artifactId>
         </dependency>
 
+        <!-- pi4j -->
+        <dependency>
+            <groupId>com.pi4j</groupId>
+            <artifactId>pi4j-core</artifactId>
+        </dependency>
+
         <!-- commons deps -->
         <dependency>
             <groupId>org.apache.commons</groupId>
