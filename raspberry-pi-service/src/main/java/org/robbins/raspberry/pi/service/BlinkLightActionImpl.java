@@ -29,10 +29,10 @@ public class BlinkLightActionImpl implements PiActionService {
             // set shutdown state for this pin
             pin.setShutdownOptions(true, PinState.LOW);
 
-            blinkLight(pin, Integer.getInteger(action.getValue()));
+            blinkLight(pin, Integer.parseInt(action.getValue()));
         }
         catch (Exception e) {
-            LOGGER.debug(e.getMessage());
+            LOGGER.debug("Error while blinking: {}", e.getMessage());
             throw new RaspberryPiAppException(e.getMessage());
         }
         finally {
@@ -65,7 +65,6 @@ public class BlinkLightActionImpl implements PiActionService {
             }
         }
         catch (InterruptedException e) {
-            LOGGER.debug(e.getMessage());
             throw new RaspberryPiAppException(e.getMessage());
         }
     }
