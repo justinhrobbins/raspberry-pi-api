@@ -53,6 +53,27 @@ public class BlinkLightActionImpl implements PiActionService {
         }
     }
 
+    private void blinkLight(final GpioPinDigitalOutput pin, int blinkCount) throws RaspberryPiAppException {
+
+        try {
+            for (int i = 0; i < blinkCount; i++) {
+                pin.high();
+                LOGGER.debug("--> GPIO state should be: ON");
+
+                Thread.sleep(blinkDelay);
+
+                // turn off gpio pin #01
+                pin.low();
+                LOGGER.debug("--> GPIO state should be: OFF");
+
+                Thread.sleep(blinkDelay);
+            }
+        }
+        catch (InterruptedException e) {
+            throw new RaspberryPiAppException(e.getMessage());
+        }
+    }
+
     private long calculateBlinkDurationInMilliseconds(final long timeInSeconds) {
         return 1000 * timeInSeconds;
     }
