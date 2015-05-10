@@ -29,14 +29,8 @@ public class BlinkLightActionImpl implements PiActionService {
             // create gpio controller
             gpio = GpioFactory.getInstance();
 
-            // provision gpio pin #01 as an output pin and turn on
-            pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
-
-            // turn off gpio pin #01
-            pin.low();
-
-            // set shutdown state for this pin
-            pin.setShutdownOptions(true, PinState.LOW);
+            // provision gpio pin #01 as an output pin
+            pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
 
             LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelay, blinkDuration);
             pin.blink(blinkDelay, blinkDuration);
