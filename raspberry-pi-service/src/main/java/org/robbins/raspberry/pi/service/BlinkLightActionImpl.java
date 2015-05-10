@@ -24,8 +24,8 @@ public class BlinkLightActionImpl implements PiActionService {
         LOGGER.debug("Blinking Light service for action: {}", action);
 
         try {
-            final long blinkDurationInSeconds = Long.parseLong(action.getValue();
-            final long blinkDurationInMilliseconds = calculateBlinkDurationInMilliseconds(blinkDurationInSeconds));
+            final long blinkDurationInSeconds = Long.parseLong(action.getValue());
+            final long blinkDurationInMilliseconds = calculateBlinkDurationInMilliseconds(blinkDurationInSeconds);
 
             // create gpio controller
             gpio = GpioFactory.getInstance();
