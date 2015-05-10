@@ -5,12 +5,16 @@ import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("blinkLight")
 public class BlinkLightActionImpl implements PiActionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlinkLightActionImpl.class);
+
+    @Value("${blink.delay}")
+    private long blinkDelay;
 
     GpioController gpio;
     GpioPinDigitalOutput pin;
@@ -20,16 +24,22 @@ public class BlinkLightActionImpl implements PiActionService {
         LOGGER.debug("Blinking Light service for action: {}", action);
 
         try {
+            final long blinkDuration = calculateBlinkDurationInMilliseconds(Long.parseLong(action.getValue()));
+
             // create gpio controller
             gpio = GpioFactory.getInstance();
 
             // provision gpio pin #01 as an output pin and turn on
             pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
 
+            // turn off gpio pin #01
+            pin.low();
+
             // set shutdown state for this pin
             pin.setShutdownOptions(true, PinState.LOW);
 
-            blinkLight(pin, Integer.parseInt(action.getValue()));
+            LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelay, blinkDuration);
+            pin.blink(blinkDelay, blinkDuration);
         }
         catch (Exception e) {
             LOGGER.debug("Error while blinking: {}", e.getMessage());
@@ -49,23 +59,7 @@ public class BlinkLightActionImpl implements PiActionService {
         }
     }
 
-    private void blinkLight(final GpioPinDigitalOutput pin, int blinkCount) throws RaspberryPiAppException {
-
-        try {
-            for (int i = 0; i < blinkCount; i++) {
-                LOGGER.debug("--> GPIO state should be: ON");
-
-                Thread.sleep(5000);
-
-                // turn off gpio pin #01
-                pin.low();
-                LOGGER.debug("--> GPIO state should be: OFF");
-
-                Thread.sleep(5000);
-            }
-        }
-        catch (InterruptedException e) {
-            throw new RaspberryPiAppException(e.getMessage());
-        }
+    private long calculateBlinkDurationInMilliseconds(final long timeInSeconds) {
+        return 1000 * timeInSeconds;
     }
 }
