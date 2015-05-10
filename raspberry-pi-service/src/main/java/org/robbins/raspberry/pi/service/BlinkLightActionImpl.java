@@ -12,28 +12,39 @@ public class BlinkLightActionImpl implements PiActionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlinkLightActionImpl.class);
 
+    GpioController gpio;
+    GpioPinDigitalOutput pin;
+
     @Override
     public void invokeAction(final PiAction action) throws RaspberryPiAppException {
         LOGGER.debug("Blinking Light service for action: {}", action);
 
         try {
             // create gpio controller
-            final GpioController gpio = GpioFactory.getInstance();
+            gpio = GpioFactory.getInstance();
 
             // provision gpio pin #01 as an output pin and turn on
-            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
+            pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
 
             // set shutdown state for this pin
             pin.setShutdownOptions(true, PinState.LOW);
 
             blinkLight(pin, Integer.getInteger(action.getValue()));
-
-            // stop all GPIO activity/threads by shutting down the GPIO controller
-            // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-            gpio.shutdown();
         }
         catch (Exception e) {
             throw new RaspberryPiAppException(e.getMessage());
+        }
+        finally {
+            // stop all GPIO activity/threads by shutting down the GPIO controller
+            // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+            if (gpio != null) {
+                LOGGER.debug("Shutting down GPIO");
+                gpio.shutdown();
+                gpio.unprovisionPin(pin);
+            }
+            else {
+                LOGGER.debug("Unable to shutdown GPIO.  There is no GPIO instance");
+            }
         }
     }
 
