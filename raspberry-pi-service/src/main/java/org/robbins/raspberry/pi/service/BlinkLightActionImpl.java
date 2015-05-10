@@ -24,7 +24,8 @@ public class BlinkLightActionImpl implements PiActionService {
         LOGGER.debug("Blinking Light service for action: {}", action);
 
         try {
-            final long blinkDuration = calculateBlinkDurationInMilliseconds(Long.parseLong(action.getValue()));
+            final long blinkDurationInSeconds = Long.parseLong(action.getValue();
+            final long blinkDurationInMilliseconds = calculateBlinkDurationInMilliseconds(blinkDurationInSeconds));
 
             // create gpio controller
             gpio = GpioFactory.getInstance();
@@ -32,9 +33,11 @@ public class BlinkLightActionImpl implements PiActionService {
             // provision gpio pin #01 as an output pin
             pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
 
-            LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelay, blinkDuration);
-            pin.blink(blinkDelay, blinkDuration);
+            LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelay, blinkDurationInMilliseconds);
+//            pin.blink(blinkDelay, blinkDuration);
+            blinkLight(pin, blinkDurationInSeconds);
         }
+
         catch (Exception e) {
             LOGGER.debug("Error while blinking: {}", e.getMessage());
             throw new RaspberryPiAppException(e.getMessage());
@@ -53,7 +56,7 @@ public class BlinkLightActionImpl implements PiActionService {
         }
     }
 
-    private void blinkLight(final GpioPinDigitalOutput pin, int blinkCount) throws RaspberryPiAppException {
+    private void blinkLight(final GpioPinDigitalOutput pin, long blinkCount) throws RaspberryPiAppException {
 
         try {
             for (int i = 0; i < blinkCount; i++) {
