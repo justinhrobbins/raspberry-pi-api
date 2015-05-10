@@ -32,6 +32,7 @@ public class BlinkLightActionImpl implements PiActionService {
             blinkLight(pin, Integer.getInteger(action.getValue()));
         }
         catch (Exception e) {
+            LOGGER.debug(e.getMessage());
             throw new RaspberryPiAppException(e.getMessage());
         }
         finally {
@@ -64,6 +65,7 @@ public class BlinkLightActionImpl implements PiActionService {
             }
         }
         catch (InterruptedException e) {
+            LOGGER.debug(e.getMessage());
             throw new RaspberryPiAppException(e.getMessage());
         }
     }
