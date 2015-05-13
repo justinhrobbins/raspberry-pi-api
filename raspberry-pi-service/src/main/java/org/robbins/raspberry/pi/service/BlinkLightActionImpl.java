@@ -13,29 +13,30 @@ public class BlinkLightActionImpl implements PiActionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlinkLightActionImpl.class);
 
-    @Value("${blink.delay}")
-    private long blinkDelay;
+    @Value("${blink.delay.in.milliseconds}")
+    private long blinkDelayInMilliseconds;
 
-    GpioController gpio;
-    GpioPinDigitalOutput pin;
+    @Value("${blink.duration.in.seconds}")
+    private long blinkDurationInSeconds;
+
+    private static final String RED = "RED";
+    private static final String GREEN = "GREEN";
+
+    private GpioController gpio;
+    private GpioPinDigitalOutput pin;
 
     @Override
     public void invokeAction(final PiAction action) throws RaspberryPiAppException {
         LOGGER.debug("Blinking Light service for action: {}", action);
 
         try {
-            final long blinkDurationInSeconds = Long.parseLong(action.getValue());
-            final long blinkDurationInMilliseconds = calculateBlinkDurationInMilliseconds(blinkDurationInSeconds);
-
             // create gpio controller
             gpio = GpioFactory.getInstance();
 
-            // provision gpio pin #01 as an output pin
-            pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
+            // provision gpio pin  as an output pin
+            pin = gpio.provisionDigitalOutputPin(convertActionValueToPin(action.getValue()));
 
-            LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelay, blinkDurationInMilliseconds);
-//            pin.blink(blinkDelay, blinkDuration);
-            blinkLight(pin, blinkDurationInSeconds);
+            blinkLight(pin);
         }
 
         catch (Exception e) {
@@ -56,28 +57,36 @@ public class BlinkLightActionImpl implements PiActionService {
         }
     }
 
-    private void blinkLight(final GpioPinDigitalOutput pin, long blinkCount) throws RaspberryPiAppException {
+    private Pin convertActionValueToPin(final String value) throws RaspberryPiAppException {
+        final String upperCaseValue = value.toUpperCase();
+
+        switch (upperCaseValue) {
+            case RED:
+                return RaspiPin.GPIO_01;
+            case GREEN:
+                return RaspiPin.GPIO_02;
+            default:
+                throw new RaspberryPiAppException("Invalid light color: " + value);
+        }
+    }
+
+    private void blinkLight(final GpioPinDigitalOutput pin) throws RaspberryPiAppException {
+
+        LOGGER.debug("Blinking LED with delay: {}, and duration: {}", blinkDelayInMilliseconds, blinkDurationInSeconds);
 
         try {
-            for (int i = 0; i < blinkCount; i++) {
+            for (int i = 0; i < blinkDurationInSeconds; i++) {
                 pin.high();
-                LOGGER.debug("--> GPIO state should be: ON");
 
-                Thread.sleep(blinkDelay);
+                Thread.sleep(blinkDelayInMilliseconds);
 
-                // turn off gpio pin #01
                 pin.low();
-                LOGGER.debug("--> GPIO state should be: OFF");
 
-                Thread.sleep(blinkDelay);
+                Thread.sleep(blinkDelayInMilliseconds);
             }
         }
         catch (InterruptedException e) {
             throw new RaspberryPiAppException(e.getMessage());
         }
-    }
-
-    private long calculateBlinkDurationInMilliseconds(final long timeInSeconds) {
-        return 1000 * timeInSeconds;
     }
 }
