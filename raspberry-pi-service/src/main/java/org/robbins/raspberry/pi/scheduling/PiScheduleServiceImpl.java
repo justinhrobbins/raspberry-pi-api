@@ -5,14 +5,11 @@ import org.quartz.impl.matchers.GroupMatcher;
 import org.robbins.raspberry.pi.exceptions.RaspberryPiAppException;
 import org.robbins.raspberry.pi.model.PiSchedule;
 import org.robbins.raspberry.pi.model.PiSchedules;
-import org.robbins.raspberry.pi.scheduling.PiScheduleService;
-import org.robbins.raspberry.pi.scheduling.PlaySoundJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
@@ -51,7 +48,7 @@ public class PiScheduleServiceImpl implements PiScheduleService {
         final JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setApplicationContext(context);
         jobDetailFactoryBean.setName(piSchedule.getScheduleName());
-        jobDetailFactoryBean.setJobClass(PlaySoundJob.class);
+        jobDetailFactoryBean.setJobClass(PiJob.class);
         jobDetailFactoryBean.getJobDataMap().put("piSchedule", piSchedule);
         jobDetailFactoryBean.afterPropertiesSet();
 
