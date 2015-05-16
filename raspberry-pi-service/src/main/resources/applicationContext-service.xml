@@ -11,6 +11,7 @@
     <context:component-scan base-package="org.robbins.raspberry.pi.service" />
 
     <import resource="classpath:applicationContext-scheduler.xml" />
+    <import resource="classpath:applicationContext-task.xml" />
     <import resource="classpath:applicationContext-jdbc.xml" />
     
 </beans>
