@@ -22,12 +22,12 @@ public class BlinkLightActionImpl implements PiActionService {
     private static final String RED = "RED";
     private static final String GREEN = "GREEN";
 
-    private GpioController gpio;
-    private GpioPinDigitalOutput pin;
-
     @Override
     public void invokeAction(final PiAction action) throws RaspberryPiAppException {
         LOGGER.debug("Blinking Light service for action: {}", action);
+
+        GpioController gpio = null;
+        GpioPinDigitalOutput pin = null;
 
         try {
             // create gpio controller
