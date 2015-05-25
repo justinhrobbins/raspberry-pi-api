@@ -1,10 +1,9 @@
 package org.robbins.raspberry.pi.feature.test;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robbins.raspberry.pi.client.ScheduleClient;
+import org.robbins.raspberry.pi.client.PiScheduleClient;
 import org.robbins.raspberry.pi.model.PiSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class ScheduleIT
 {
     @Autowired
-    private ScheduleClient scheduleClientClient;
+    private PiScheduleClient piScheduleClientClient;
 
     private static final String ACTION_NAME = "playSound";
     private static final String ACTION_VALUE = "tps_reports.wav";
@@ -25,8 +24,8 @@ public class ScheduleIT
     @Test
     public void testCreateAndDeleteSchedule() {
         PiSchedule schedule = createSchedule();
-        scheduleClientClient.createSchedule(schedule);
-        scheduleClientClient.deleteSchedule(schedule.getScheduleName());
+        piScheduleClientClient.createSchedule(schedule);
+        piScheduleClientClient.deleteSchedule(schedule.getScheduleName());
     }
 
     private PiSchedule createSchedule() {

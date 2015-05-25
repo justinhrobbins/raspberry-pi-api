@@ -2,7 +2,6 @@ package org.robbins.raspberry.pi.client;
 
 
 import java.util.Collections;
-import java.util.Map;
 
 import org.robbins.raspberry.pi.model.PiSchedule;
 import org.slf4j.Logger;
@@ -13,9 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component("scheduleClient")
-public class DefaultScheduleClient implements ScheduleClient {
+public class DefaultPiScheduleClient implements PiScheduleClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultScheduleClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPiScheduleClient.class);
     private static final String SCHEDULE_ENDPOINT = "schedule";
     private static final String DELETE_SCHEDULE_ENDPOINT = "schedule/{scheduleName}";
 
