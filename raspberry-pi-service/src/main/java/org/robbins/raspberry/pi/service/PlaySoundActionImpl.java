@@ -64,14 +64,17 @@ public class PlaySoundActionImpl implements PiActionService {
 
         try {
             final Path directoryPath = Paths.get(new URI("file://" + baseSoundDirectory));
-            if (Files.isDirectory(directoryPath)) {
-                final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directoryPath);
-                Stream<Path> stream = StreamSupport.stream(directoryStream.spliterator(), false);
-                stream.filter(path ->
-                        validFileExtensions.contains(FilenameUtils.getExtension(path.getFileName().toString())))
-                .forEach(path ->
-                        soundFiles.getSoundFiles().add(path.getFileName().toString()));
+
+            if (!Files.isDirectory(directoryPath)) {
+                throw new RaspberryPiAppException("'base.sound.files.directory' not found: " + baseSoundDirectory);
             }
+
+            final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(directoryPath);
+            Stream<Path> stream = StreamSupport.stream(directoryStream.spliterator(), false);
+            stream.filter(path ->
+                    validFileExtensions.contains(FilenameUtils.getExtension(path.getFileName().toString())))
+            .forEach(path ->
+                    soundFiles.getSoundFiles().add(path.getFileName().toString()));
         }
         catch (URISyntaxException|IOException e) {
             throw new RaspberryPiAppException(e.getMessage());
