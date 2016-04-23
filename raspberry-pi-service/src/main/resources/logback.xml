@@ -7,8 +7,8 @@
     </appender>
 
     <logger name="org.robbins" level="debug" />
-    <logger name="org.springframework" level="debug" />
-    <logger name="org.springsource" level="debug" />
+    <logger name="org.springframework" level="info" />
+    <logger name="org.springsource" level="info" />
     <logger name="org.springframework.jdbc" level="info" />
     <logger name="org.springframework.scheduling.quartz" level="info" />
     <logger name="org.quartz" level="info" />
