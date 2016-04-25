@@ -9,7 +9,7 @@ public class DefaultStatusClient implements StatusClient {
 
     private static final String statusUrl = "status";
 
-    @Value("${server.address}")
+    @Value("${api.server.address}")
     private String serverAddress;
 
     private RestTemplate restTemplate = new RestTemplate();

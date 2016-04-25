@@ -18,7 +18,7 @@ public class DefaultPiScheduleClient implements PiScheduleClient {
     private static final String SCHEDULE_ENDPOINT = "schedule";
     private static final String DELETE_SCHEDULE_ENDPOINT = "schedule/{scheduleName}";
 
-    @Value("${server.address}")
+    @Value("${api.server.address}")
     private String serverAddress;
 
     private RestTemplate restTemplate = new RestTemplate();

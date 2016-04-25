@@ -15,7 +15,7 @@ public class DefaultPiActionClient implements PiActionClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPiActionClient.class);
     private static final String PI_ACTION_URL = "pi-action";
 
-    @Value("${server.address}")
+    @Value("${api.server.address}")
     private String serverAddress;
 
     private RestTemplate restTemplate = new RestTemplate();
